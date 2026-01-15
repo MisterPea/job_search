@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Search Links - V7</title>
+  <style>
+    #__root {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .select-wrapper {
+      width: 100%;
+    }
+
+    .select-wrapper label {
+      margin-right: 10px;
+    }
+
+    .main-area {
+      padding: 8px 12px 10px;
+      border-radius: 10px;
+      background-color: whitesmoke;
+      color: #404040;
+      flex: 1 1 auto;
+      max-width: 50%;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 100%;
+    }
+
+    li {
+      width: 100%;
+      margin-top: 8px;
+      position: relative;
+    }
+
+    li:last-child {
+      margin-bottom: 4px;
+    }
+
+    button {
+      padding: 5px 10px;
+      border: 1px solid rgba(64, 64, 64, 0.2);
+      text-align: left;
+      border-radius: 3px;
+      width: 100%;
+      height: fit-content;
+      color: rgba(64, 64, 64, 0.95);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.5);
+      transition: background 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    button:hover {
+      background: rgba(64, 64, 64, 0.015);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="__root"></div>
+</body>
+<script>
+  const siteList = [
+    { site: "Greenhouse", link: "boards.greenhouse.io/*" },
+    { site: "Ashby", link: "jobs.ashbyhq.com/*" },
+    { site: "Lever.co", link: "jobs.lever.co/*" },
+    { site: "ICIMS", link: "icims.com/jobs/*" },
+    { site: "Workable", link: "apply.workable.com/*" },
+    { site: "JazzHR", link: "app.jazzhr.com/careers" },
+    { site: "Teamtailor", link: "*.teamtailor.com" },
+    { site: "General 'Jobs' Wildcard", link: "jobs.*" },
+    { site: "General 'Career' Wildcard", link: "careers.*" },
+    { site: "General 'Career' Subdomain", link: "*.com/careers" },
+    { site: "General 'Jobs' Subdomain", link: "*.com/jobs" },
+    { site: "Comeet", link: "comeet.com/*" },
+    { site: "Workday", link: "myworkdayjobs.com" },
+    { site: "Recruitee", link: "*.recruitee.com/*" },
+    { site: "SmartRecruiters", link: "jobs.smartrecruiters.com" },
+  ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // const searchTerms = [
+  //     "React Developer",
+  //     "Web Developer",
+  //     "Web Designer",
+  //     "UI Developer",
+  //     "UI Engineer",
+  //     "Design Technologist",
+  //     "UI Engineer",
+  //     "UI Systems Developer",
+  //     "Design Systems Engineer",
+  //     "Frontend Application Developer",
+  //     "Frontend Developer",
+  //     "JavaScript Application Developer",
+  //     "React Application Engineer",
+  // ];
+
+  const searchTerms = [
+    "Frontend Engineer",
+    "Frontend Developer",
+    "UI Developer",
+    "Web UI Developer",
+    "JavaScript Developer",
+    "JavaScript Engineer",
+    "React Developer",
+    "React Engineer",
+    "Web Developer",
+    "Web Engineer",
+    "Client-Side Developer",
+    "Client-Side Engineer",
+    "UX Engineer",
+    "User Experience Engineer",
+    "HTML/CSS Developer",
+    "Full-Stack Developer",
+    "Full-Stack Engineer",
+    "Web Designer (with development skills)",
+    "Interactive Developer"
+  ];
+
+  const main = document.getElementById( '__root' );
+
+  // Open link - mark as seen
+  function openAndMarkAsSeen( eventTarget, searchTerm, siteLink ) {
+    eventTarget.target.style.backgroundColor = 'rgb(52,199,89)';
+    eventTarget.target.style.color = 'whitesmoke';
+    // &as_qdr=d means limit search to the last 24 hours
+    const select = document.getElementById( 'time-period' );
+    const selectValue = select.value || 'd';
+    console.log( selectValue );
+    window.open( `https://www.google.com/search?q="${searchTerm}"+site:${siteLink}&as_qdr=${selectValue}`, '_blank' );
+  }
+
+  function createList( siteLink ) {
+    const list = document.createElement( 'ul' );
+    for ( const searchTerm of searchTerms ) {
+      const li = document.createElement( 'li' );
+      const button = document.createElement( 'button' );
+      button.innerText = searchTerm;
+      button.addEventListener( 'click', ( e ) => openAndMarkAsSeen( e, searchTerm, siteLink ) );
+      li.appendChild( button );
+      list.appendChild( li );
+    }
+    return list;
+  }
+
+  function createTimeSelector() {
+    const selectWrapper = document.createElement( 'div' );
+    selectWrapper.classList.add( 'select-wrapper' );
+    const select = document.createElement( 'select' );
+    select.id = 'time-period';
+    const label = document.createElement( 'label' );
+    label.innerText = "Choose time period";
+    label.htmlFor = '#time-period';
+
+    // Search periods
+    const vals = [
+      { value: 'd', text: '24h' },
+      { value: 'h9', text: '9h' },
+      { value: 'h6', text: '6h' },
+      { value: 'h3', text: '3h' },
+      { value: 'h', text: '1hr' }
+    ];
+
+    for ( const val of vals ) {
+      const opt = document.createElement( 'option' );
+      opt.value = val.value;
+      opt.innerText = val.text;
+      select.appendChild( opt );
+    }
+
+    selectWrapper.appendChild( label );
+    selectWrapper.appendChild( select );
+    main.appendChild( selectWrapper );
+  }
+
+  createTimeSelector();
+  for ( const { site, link } of siteList ) {
+    const div = document.createElement( 'div' );
+    const h2 = document.createElement( 'h2' );
+    const ul = createList( link );
+    h2.textContent = site;
+    div.appendChild( h2 );
+    div.appendChild( ul );
+    div.className = `main-area ${site.toLowerCase().replace( '.', '-' )}`;
+    main.appendChild( div );
+  }
+</script>
+
+</html>
